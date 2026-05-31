@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VCSMS Robotics Guild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-deep:    #020c1b;
+    --blue-dark:    #0a1628;
+    --blue-mid:     #0d2147;
+    --blue-accent:  #0e7fd4;
+    --blue-bright:  #1eb8ff;
+    --blue-glow:    #38d2ff;
+    --white:        #e8f4ff;
+    --white-dim:    #a0bcd8;
+    --border:       rgba(30, 184, 255, 0.25);
+    --font-display: 'Orbitron', monospace;
+    --font-body:    'Exo 2', sans-serif;
+    --nav-h:        68px;
+    --transition:   0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font-body);
+    background: var(--blue-deep);
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  /* Grid / circuit background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.45;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: var(--nav-h);
+    display: flex; align-items: center;
+    padding: 0 2.5rem;
+    background: rgba(2, 12, 27, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 0 24px rgba(14,127,212,0.15);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.75rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .nav-logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--blue-accent), var(--blue-glow));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 14px rgba(56,210,255,0.4);
+    overflow: hidden;
+  }
+  .nav-logo-icon img {
+    width: 50px; height: 50px;
+    object-fit: contain;
+  }
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+  }
+  .nav-logo-text span { color: var(--blue-glow); }
+
+  /* HERO — full viewport */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(160deg, #020c1b 0%, #0a1e3f 50%, #071228 100%);
+  }
+
+  /* Scanlines */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(14,127,212,0.025) 3px, rgba(14,127,212,0.025) 4px);
+    z-index: 1;
+  }
+
+  /* Radial glow */
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(14,127,212,0.18) 0%, transparent 70%);
+    left: 50%; top: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Logos row */
+  .hero-logos {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.7s ease both;
+  }
+  .hero-logo-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--blue-accent), var(--blue-glow));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 24px rgba(56,210,255,0.45);
+    overflow: hidden;
+  }
+  .hero-logo-icon img {
+    width: 88px; height: 88px;
+    object-fit: contain;
+  }
+  .hero-logos-divider {
+    width: 1px; height: 56px;
+    background: linear-gradient(to bottom, transparent, var(--blue-glow), transparent);
+    opacity: 0.5;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: var(--font-display); font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--blue-glow);
+    border: 1px solid var(--blue-glow);
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.75rem;
+    animation: fadeUp 0.7s ease 0.1s both;
+    animation: pulse-border 2.5s ease infinite, fadeUp 0.7s ease 0.1s both;
+  }
+  @keyframes pulse-border {
+    0%,100% { box-shadow: 0 0 0 0 rgba(56,210,255,0.4); }
+    50%      { box-shadow: 0 0 0 6px rgba(56,210,255,0); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+  .hero h1 .accent { color: var(--blue-glow); text-shadow: 0 0 20px var(--blue-bright); }
+
+  /* "Website still in progress" message */
+  .wip-message {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    border: 1px solid var(--border);
+    background: rgba(10, 30, 65, 0.6);
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    animation: fadeUp 0.7s ease 0.35s both;
+    backdrop-filter: blur(6px);
+  }
+  .wip-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue-glow);
+    box-shadow: 0 0 8px var(--blue-glow);
+    animation: blink 1.4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.2; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .hero-logo-icon { width: 56px; height: 56px; border-radius: 10px; }
+    .hero-logo-icon img { width: 68px; height: 68px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">
+      <img src="vcsms.png" alt="VCSMS Logo">
+    </div>
+    <div class="nav-logo-icon">
+      <img src="logo.png" alt="Robotics Guild Logo">
+    </div>
+    <div class="nav-logo-text">VCSMS<br><span>Robotics Guild</span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+
+    <!-- Logos -->
+    <div class="hero-logos">
+      <div class="hero-logo-icon">
+        <img src="vcsms.png" alt="VCSMS Logo">
+      </div>
+      <div class="hero-logos-divider"></div>
+      <div class="hero-logo-icon">
+        <img src="logo.png" alt="Robotics Guild Logo">
+      </div>
+    </div>
+
+    <div class="hero-badge">2026-2027 · Valenzuela City School Of Mathematics and Science</div>
+
+    <h1>VCSMS<br><span class="accent">Robotics Guild</span></h1>
+
+    <div class="wip-message">
+      <div class="wip-dot"></div>
+      Website Still In Progress
+      <div class="wip-dot"></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
